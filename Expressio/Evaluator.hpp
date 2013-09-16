@@ -267,7 +267,7 @@ std::vector<typename Evaluator<ValueType>::InfixToken> Evaluator<ValueType>::tok
 	expression = handleLeadingUnaryNegation(expression);
 	
 	std::vector<InfixToken> tokens;
-	InfixToken prevToken; // Used to determine whether a minus represents substraction of unary negation.
+	InfixToken prevToken; // Used to determine whether a minus represents substraction or unary negation.
 	
 	while (expression.length() > 0)
 	{
