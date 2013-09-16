@@ -19,7 +19,7 @@ Documentation
 
 Documentation for Expression is generated using [Doxygen](http://www.stack.nl/~dimitri/doxygen/index.html) (1.8.3 at least). Run `doxygen` from the root folder, which will generate HTML documentation in the folder `doc`.
 
-Online documentation be be found here: 
+Online documentation be be found here: http://avidanborisov.github.io/Expressio/
 
 Licensing
 ---------
