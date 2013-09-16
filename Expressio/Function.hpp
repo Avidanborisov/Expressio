@@ -16,14 +16,14 @@ struct ArgumentsUnpacker
 {
 	template<class Type, class Function, class InputIterator, class... UnpackedArguments>
 	static Type unpack(Function&& function, InputIterator argsBegin, InputIterator argsEnd,
-					   UnpackedArguments&&... unpackedArgs)
+	                   UnpackedArguments&&... unpackedArgs)
 	{
 		if (argsBegin == argsEnd)
 			throw std::invalid_argument("Syntax error: Not enough arguments.");
 
 		return ArgumentsUnpacker<argsCount - 1>::template unpack<Type>
-			   (std::forward<Function>(function), std::next(argsBegin), argsEnd,
-				std::forward<UnpackedArguments>(unpackedArgs)..., *argsBegin);
+		        (std::forward<Function>(function), std::next(argsBegin), argsEnd,
+		         std::forward<UnpackedArguments>(unpackedArgs)..., *argsBegin);
 	}
 };
 
@@ -32,7 +32,7 @@ struct ArgumentsUnpacker<0>
 {
 	template <class Type, class Function, class InputIterator, class... UnpackedArguments>
 	static Type unpack(Function&& function, InputIterator argsBegin, InputIterator argsEnd,
-					   UnpackedArguments&&... unpackedArgs)
+	                   UnpackedArguments&&... unpackedArgs)
 	{
 		if (argsBegin != argsEnd)
 			throw std::invalid_argument("Syntax error: Too many arguments.");

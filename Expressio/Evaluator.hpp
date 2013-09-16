@@ -202,8 +202,8 @@ const std::unordered_map<std::string, typename Evaluator<ValueType>::Operator> E
 	{ "-" , { [](ValueType x, ValueType y) { return x - y;          }, 1, Operator::Associativity::left  } },
 	{ "*" , { [](ValueType x, ValueType y) { return x * y;          }, 2, Operator::Associativity::left  } },
 	{ "/" , { [](ValueType x, ValueType y) { if (y == ValueType(0))
-                                                 throw std::invalid_argument("Math error: Division by zero");
-                                             return x / y;          }, 2, Operator::Associativity::left  } },
+	                                             throw std::invalid_argument("Math error: Division by zero");
+	                                         return x / y;          }, 2, Operator::Associativity::left  } },
 	{ "@" , { [](ValueType x)              { return -x;             }, 3, Operator::Associativity::right } },
 	{ "^" , { [](ValueType x, ValueType y) { return std::pow(x, y); }, 4, Operator::Associativity::right } },
 };
