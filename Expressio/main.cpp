@@ -1,5 +1,7 @@
 #include <iostream>
+#include <ctype.h>
 #include <cmath>
+#include <algorithm>
 #include <boost/math/constants/constants.hpp>
 
 #include "Expressio.hpp"
@@ -69,6 +71,32 @@ int main()
 {
 	Calculator c;
 
+	auto replaceConstant = [](std::string& expr, const std::string& constant, double value)
+	{
+		auto isIdentifier = [](char c) { return isalnum(c) || c == '_'; };
+		
+		auto first = expr.begin();
+		do
+		{
+			first = std::find_if(first, expr.end(), isIdentifier);
+			auto last = std::find_if_not(first, expr.end(), isIdentifier);
+			
+			if (first == expr.end())
+				break;
+			
+			auto firstIndex = first - expr.begin();
+			
+			if (last - first == constant.end() - constant.begin() && std::string(first, last) == constant)
+				expr.replace(first, last, std::to_string(value));
+			
+			first = std::find_if_not(expr.begin() + firstIndex, expr.end(), isIdentifier);
+		} while (true);
+	};
+	
 	for (std::string expr; getline(std::cin, expr) && expr != "exit"; )
+	{
+		replaceConstant(expr, "pi", pi);
+		replaceConstant(expr, "e", e);
 		std::cout << c.calculate(expr) << '\n';
+	}
 }
