@@ -87,8 +87,8 @@ private:
 		/// Associativity type
 		enum class Associativity
 		{
-			left, ///< Left associativity - operators of equal precedence will be evaluated from left to right
-			right ///< Right associativity - operators of equal precedence will be evaluated from right to left
+			left, ///< operators of equal precedence will be evaluated from left to right
+			right ///< operators of equal precedence will be evaluated from right to left
 		} associativity; ///< The associativity of the operator
 
 		/**
@@ -130,7 +130,7 @@ private:
 		auto firstBadCharacter = std::find_if_not(s.begin(), s.end(), func);
 	
 		if (firstBadCharacter != s.end()) // sequence is not empty
-			return s.substr(0, firstBadCharacter - s.begin()); // return the substring [0, firstBadCharacterIndex)
+			return s.substr(0, firstBadCharacter - s.begin()); // return the substring [0, firstBadCharacter)
 	
 		return ""; // Sequence is empty
 	}
@@ -214,7 +214,8 @@ private:
 			std::stringstream valueStream;
 			ValueType value;
 	
-			// The minus represents negation if the previous token wasn't either a value or a right parenthesis
+			// The minus represents negation if the previous token
+			// wasn't either a value or a right parenthesis
 			if (expression[0] == '-' && !boost::get<ValueType*>(&prevToken) && !boost::get<RightParen*>(&prevToken))
 				expression[0] = '@';
 			
@@ -229,7 +230,8 @@ private:
 			{
 				token = value;
 				// copy the rest of valueStream (after numeric input has been discarded) back into the expression
-				expression = std::string(std::istreambuf_iterator<char>(valueStream), std::istreambuf_iterator<char>());
+				expression = std::string(std::istreambuf_iterator<char>(valueStream),
+				                         std::istreambuf_iterator<char>());
 			}
 			else if (c == '(') // Left parenthesis
 			{
@@ -393,7 +395,8 @@ private:
 	
 					bool operator()(const Operator& op2) const
 					{
-						if ((op1.associativity == Operator::Associativity::left && op1.precedence == op2.precedence) ||
+						if ((op1.associativity == Operator::Associativity::left &&
+						     op1.precedence == op2.precedence) ||
 						    (op1.precedence < op2.precedence))
 						{
 							output.emplace_back(op2);
