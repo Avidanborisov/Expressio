@@ -51,12 +51,13 @@ public:
 	 * Add user-defined function to the evaluator
 	 *
 	 * @param funcName The name of the function
+	 * @throws std::invalid_argument Constant with same name exists
 	 * @param function The function
 	 */
 	void addFunction(const std::string& funcName, const Function& function)
 	{
 		if (constantsMap.find(funcName) != constantsMap.end())
-			throw std::invalid_argument("Constant with same name (" + funcName + ") exists!");
+			throw std::invalid_argument("Constant with same name (" + funcName + ") exists");
 		
 		functionMap.emplace(funcName, function);
 	}
@@ -64,13 +65,14 @@ public:
 	/**
 	 * Add user-defined constant to the evaluator
 	 *
-	 * @param funcName The name of the constant
-	 * @param function The constant's value
+	 * @param constantName The name of the constant
+	 * @throws std::invalid_argument Function with same name exists
+	 * @param value The constant's value
 	 */
 	void addConstant(const std::string& constantName, const ValueType& value)
 	{
 		if (functionMap.find(constantName) != functionMap.end())
-			throw std::invalid_argument("Function with same name (" + constantName + ") exists!");
+			throw std::invalid_argument("Function with same name (" + constantName + ") exists");
 		
 		constantsMap.emplace(constantName, value);
 	}
@@ -105,8 +107,8 @@ private:
 		/// Associativity type
 		enum class Associativity
 		{
-			left, ///< operators of equal precedence will be evaluated from left to right
-			right ///< operators of equal precedence will be evaluated from right to left
+			left, ///< Operators of equal precedence will be evaluated from left to right
+			right ///< Operators of equal precedence will be evaluated from right to left
 		} associativity; ///< The associativity of the operator
 
 		/**
@@ -228,20 +230,20 @@ private:
 	/**
 	 * Tokenize the expression string to a list of infix tokens.
 	 * 
-	 * @param expression The expression string
+	 * @param expr The expression string
 	 * @throws std::invalid_argument Invalid expression
 	 * @return A vector of infix tokens representing the expression
 	 */
-	std::vector<InfixToken> tokenize(std::string expression) const
+	std::vector<InfixToken> tokenize(std::string expr) const
 	{
 		// Remove all whitespace from the expression
-		expression.erase(std::remove_if(expression.begin(), expression.end(), ::isspace), expression.end());
-		expression = handleLeadingUnaryNegation(expression);
+		expr.erase(std::remove_if(expr.begin(), expr.end(), ::isspace), expr.end());
+		expr = handleLeadingUnaryNegation(expr);
 		
 		std::vector<InfixToken> tokens;
 		InfixToken prevToken; // Used to determine whether a minus represents substraction or unary negation.
 		
-		while (expression.length() > 0)
+		while (expr.length() > 0)
 		{
 			InfixToken token;
 			std::string subStr;
@@ -250,39 +252,41 @@ private:
 	
 			// The minus represents negation if the previous token
 			// wasn't either a value or a right parenthesis			
-			if (expression[0] == '-' && !boost::get<ValueType>(&prevToken) && !boost::get<RightParen>(&prevToken))
-				expression[0] = '@';
+			if (expr[0] == '-' && !boost::get<ValueType>(&prevToken) && !boost::get<RightParen>(&prevToken))
+				expr[0] = '@';
 			
-			char c = expression[0];
+			char c = expr[0];
 				
 			if (!isalnum(c) && !isspace(c) && std::string("(),.").find(c) == std::string::npos) // Operator
 			{			
 				token = getOperator(std::string(1, c));
-				expression.erase(0, 1);
+				expr.erase(0, 1);
 			}		
-			else if ([&]() -> bool { valueStream << expression; return valueStream >> value; }()) // Value
+			else if ([&]() -> bool { valueStream << expr; return valueStream >> value; }()) // Value
 			{
 				token = value;
-				// copy the rest of valueStream (after numeric input has been discarded) back into the expression
-				expression = std::string(std::istreambuf_iterator<char>(valueStream),
+				
+				// copy the rest of valueStream (after numeric input has been discarded)
+				// back into the expression
+				expr = std::string(std::istreambuf_iterator<char>(valueStream),
 				                         std::istreambuf_iterator<char>());
 			}
 			else if (c == '(') // Left parenthesis
 			{
 				token = LeftParen();
-				expression.erase(0, 1);
+				expr.erase(0, 1);
 			}
 			else if (c == ')') // Right parenthesis
 			{
 				token = RightParen();
-				expression.erase(0, 1);
+				expr.erase(0, 1);
 			}
 			else if (c == ',') // Comma
 			{
 				token = Comma();
-				expression.erase(0, 1);
+				expr.erase(0, 1);
 			}
-			else if (!isdigit(c) && (subStr = nextPredicatedString(expression,
+			else if (!isdigit(c) && (subStr = nextPredicatedString(expr,
 			         [](char c) { return isalnum(c) || c == '_'; })) != "") // Function or constant
 			{
 				if (auto constantValue = getConstant(subStr)) // if constant
@@ -290,7 +294,7 @@ private:
 				else // if function
 					token = getFunction(subStr);
 				
-				expression.erase(0, subStr.length());
+				expr.erase(0, subStr.length());
 			}
 			else
 			{
