@@ -2,6 +2,7 @@
 #define EVALUATOR_HPP
 
 #include <algorithm>
+#include <boost/optional.hpp>
 #include <boost/variant.hpp>
 #include <cmath>
 #include <ctype.h>
@@ -54,7 +55,24 @@ public:
 	 */
 	void addFunction(const std::string& funcName, const Function& function)
 	{
+		if (constantsMap.find(funcName) != constantsMap.end())
+			throw std::invalid_argument("Constant with same name (" + funcName + ") exists!");
+		
 		functionMap.emplace(funcName, function);
+	}
+	
+	/**
+	 * Add user-defined constant to the evaluator
+	 *
+	 * @param funcName The name of the constant
+	 * @param function The constant's value
+	 */
+	void addConstant(const std::string& constantName, const ValueType& value)
+	{
+		if (functionMap.find(constantName) != functionMap.end())
+			throw std::invalid_argument("Function with same name (" + constantName + ") exists!");
+		
+		constantsMap.emplace(constantName, value);
 	}
 	
 	/**
@@ -109,6 +127,10 @@ private:
 	/// A string to function dictionary. Can be modified during the lifetime of the Evalutor.
 	/// Each user-defined function has to be present here before evaluation.
 	std::unordered_map<std::string, Function> functionMap;
+	
+	/// A constant to value dictionary. Can be modified during the lifetime of the Evalutor.
+	/// Each user-defined constant has to be present here before evaluation.
+	std::unordered_map<std::string, ValueType> constantsMap;
 
 	/// A token in an infix expression. This can be either a value, a comma, a parenthesis, an operator or a function.
 	using InfixToken = boost::variant<ValueType, Comma, LeftParen, RightParen, Operator, Function>;
@@ -128,11 +150,7 @@ private:
 	static std::string nextPredicatedString(const std::string& s, CharacterPredicate func)
 	{
 		auto firstBadCharacter = std::find_if_not(s.begin(), s.end(), func);
-	
-		if (firstBadCharacter != s.end()) // sequence is not empty
-			return s.substr(0, firstBadCharacter - s.begin()); // return the substring [0, firstBadCharacter)
-	
-		return ""; // Sequence is empty
+		return s.substr(0, firstBadCharacter - s.begin()); // return the substring [0, firstBadCharacterIndex)
 	}
 	
 	/**
@@ -153,11 +171,11 @@ private:
 	}
 	
 	/**
-	 * Search the function map for the function's name and return the corresponding function it if found.
+	 * Search the function map for the function's name and return the corresponding function if found.
  	 * 
 	 * @param functionName The function's name
 	 * @throws std::invalid_argument Invalid function name
-	 * @return The corresponding operator
+	 * @return The corresponding function
 	 */
 	Function getFunction(const std::string& functionName) const
 	{
@@ -167,6 +185,22 @@ private:
 			throw std::invalid_argument("Syntax error: Unknown function " + functionName);
 	
 		return pair->second; // The second item in the pair is the function itself
+	}
+	
+	/**
+	 * Search the constants map for the constants's name and return the corresponding value if found.
+ 	 * 
+	 * @param constantName The constant's name
+	 * @return The corresponding value or `boost::optional<ValueType>` null
+	 */
+	boost::optional<ValueType> getConstant(const std::string& constantName) const
+	{
+		auto pair = constantsMap.find(constantName);
+	
+		if (pair == constantsMap.end())
+			return { }; // null, essentially
+	
+		return pair->second; // The second item in the pair is the value
 	}
 	
 	/**
@@ -215,8 +249,8 @@ private:
 			ValueType value;
 	
 			// The minus represents negation if the previous token
-			// wasn't either a value or a right parenthesis
-			if (expression[0] == '-' && !boost::get<ValueType*>(&prevToken) && !boost::get<RightParen*>(&prevToken))
+			// wasn't either a value or a right parenthesis			
+			if (expression[0] == '-' && !boost::get<ValueType>(&prevToken) && !boost::get<RightParen>(&prevToken))
 				expression[0] = '@';
 			
 			char c = expression[0];
@@ -249,9 +283,13 @@ private:
 				expression.erase(0, 1);
 			}
 			else if (!isdigit(c) && (subStr = nextPredicatedString(expression,
-			         [](char c) { return isalnum(c) || c == '_'; })) != "") // Function
+			         [](char c) { return isalnum(c) || c == '_'; })) != "") // Function or constant
 			{
-				token = getFunction(subStr);
+				if (auto constantValue = getConstant(subStr)) // if constant
+					token = *constantValue;
+				else // if function
+					token = getFunction(subStr);
+				
 				expression.erase(0, subStr.length());
 			}
 			else
