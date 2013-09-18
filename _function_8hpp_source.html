@@ -111,8 +111,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;            <span class="keywordflow">throw</span> std::invalid_argument(<span class="stringliteral">&quot;Syntax error: Not enough arguments.&quot;</span>);</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        <span class="keywordflow">return</span> ArgumentsUnpacker&lt;argsCount - 1&gt;::template unpack&lt;Type&gt;</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;               (std::forward&lt;Function&gt;(<span class="keyword">function</span>), std::next(argsBegin), argsEnd,</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;                std::forward&lt;UnpackedArguments&gt;(unpackedArgs)..., *argsBegin);</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;                (std::forward&lt;Function&gt;(<span class="keyword">function</span>), std::next(argsBegin), argsEnd,</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;                 std::forward&lt;UnpackedArguments&gt;(unpackedArgs)..., *argsBegin);</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    }</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;};</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;</div>
@@ -165,7 +165,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Sep 16 2013 17:50:35 for Expressio by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Sep 18 2013 18:26:11 for Expressio by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

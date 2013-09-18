@@ -110,6 +110,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a69f505e9ad01ebc161bd4ec18cf474ce"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_expressio_1_1_evaluator.html#a69f505e9ad01ebc161bd4ec18cf474ce">addFunction</a> (const std::string &amp;funcName, const <a class="el" href="class_expressio_1_1_evaluator.html#ac737763a26a4c3166f289a2d83acfcdc">Function</a> &amp;function)</td></tr>
 <tr class="memdesc:a69f505e9ad01ebc161bd4ec18cf474ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add user-defined function to the evaluator.  <a href="#a69f505e9ad01ebc161bd4ec18cf474ce">More...</a><br/></td></tr>
 <tr class="separator:a69f505e9ad01ebc161bd4ec18cf474ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d8a3c0fced77a4010d69c243bc6b79a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_expressio_1_1_evaluator.html#a3d8a3c0fced77a4010d69c243bc6b79a">addConstant</a> (const std::string &amp;constantName, const ValueType &amp;value)</td></tr>
+<tr class="memdesc:a3d8a3c0fced77a4010d69c243bc6b79a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add user-defined constant to the evaluator.  <a href="#a3d8a3c0fced77a4010d69c243bc6b79a">More...</a><br/></td></tr>
+<tr class="separator:a3d8a3c0fced77a4010d69c243bc6b79a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af053c0373a25635299fd8d2bf7f8eb80"><td class="memItemLeft" align="right" valign="top">ValueType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_expressio_1_1_evaluator.html#af053c0373a25635299fd8d2bf7f8eb80">evaluate</a> (const std::string &amp;expression) const </td></tr>
 <tr class="memdesc:af053c0373a25635299fd8d2bf7f8eb80"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluate the expression.  <a href="#af053c0373a25635299fd8d2bf7f8eb80">More...</a><br/></td></tr>
 <tr class="separator:af053c0373a25635299fd8d2bf7f8eb80"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -147,11 +150,70 @@ template&lt;class ValueType&gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a3d8a3c0fced77a4010d69c243bc6b79a"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class ValueType&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="class_expressio_1_1_evaluator.html">Expressio::Evaluator</a>&lt; ValueType &gt;::addConstant </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>constantName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const ValueType &amp;&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Add user-defined constant to the evaluator. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">constantName</td><td>The name of the constant </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>Function with same name exists </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>The constant's value </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="a69f505e9ad01ebc161bd4ec18cf474ce"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class ValueType &gt; </div>
+template&lt;class ValueType&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void <a class="el" href="class_expressio_1_1_evaluator.html">Expressio::Evaluator</a>&lt; ValueType &gt;::addFunction </td>
@@ -171,12 +233,28 @@ template&lt;class ValueType &gt; </div>
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Add user-defined function to the evaluator. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">funcName</td><td>The name of the function </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>Constant with same name exists </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
     <tr><td class="paramname">function</td><td>The function </td></tr>
   </table>
   </dd>
@@ -188,7 +266,10 @@ template&lt;class ValueType &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class ValueType &gt; </div>
+template&lt;class ValueType&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">ValueType <a class="el" href="class_expressio_1_1_evaluator.html">Expressio::Evaluator</a>&lt; ValueType &gt;::evaluate </td>
@@ -198,6 +279,11 @@ template&lt;class ValueType &gt; </div>
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Evaluate the expression. </p>
@@ -223,7 +309,7 @@ template&lt;class ValueType &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Sep 16 2013 17:50:35 for Expressio by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Sep 18 2013 18:26:11 for Expressio by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>
