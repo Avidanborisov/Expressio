@@ -6,9 +6,6 @@
 
 #include "Expressio.hpp"
 
-const double pi = boost::math::constants::pi<double>();
-const double e =  boost::math::constants::e<double>();
-
 class Calculator
 {
 	Expressio::Evaluator<double> evaluator;
@@ -16,6 +13,12 @@ class Calculator
 public:
 	Calculator()
 	{
+		const double pi = boost::math::constants::pi<double>();
+		const double e =  boost::math::constants::e<double>();
+		
+		evaluator.addConstant("pi", pi);
+		evaluator.addConstant("e", e);
+		
 		evaluator.addFunction("abs"  , [](double x) { return std::abs(x);    });
 		evaluator.addFunction("cbrt" , [](double x) { return std::cbrt(x);   });
 		evaluator.addFunction("ceil" , [](double x) { return std::ceil(x);   });
@@ -30,12 +33,12 @@ public:
 		evaluator.addFunction("sqrt" , [](double x) { return std::sqrt(x);   });
 		evaluator.addFunction("trunc", [](double x) { return std::trunc(x);  });
 
-		evaluator.addFunction("cos"  , [](double x) { return std::cos(x * pi / 180);  });
-		evaluator.addFunction("sin"  , [](double x) { return std::sin(x * pi / 180);  });
-		evaluator.addFunction("tan"  , [](double x) { return std::tan(x * pi / 180);  });
-		evaluator.addFunction("acos" , [](double x) { return std::acos(x) * 180 / pi; });
-		evaluator.addFunction("asin" , [](double x) { return std::asin(x) * 180 / pi; });
-		evaluator.addFunction("atan" , [](double x) { return std::atan(x) * 180 / pi; });
+		evaluator.addFunction("cos"  , [=](double x) { return std::cos(x * pi / 180);  });
+		evaluator.addFunction("sin"  , [=](double x) { return std::sin(x * pi / 180);  });
+		evaluator.addFunction("tan"  , [=](double x) { return std::tan(x * pi / 180);  });
+		evaluator.addFunction("acos" , [=](double x) { return std::acos(x) * 180 / pi; });
+		evaluator.addFunction("asin" , [=](double x) { return std::asin(x) * 180 / pi; });
+		evaluator.addFunction("atan" , [=](double x) { return std::atan(x) * 180 / pi; });
 		
 		evaluator.addFunction("acosh", [](double x) { return std::acosh(x); });
 		evaluator.addFunction("asinh", [](double x) { return std::asinh(x); });
@@ -70,33 +73,7 @@ public:
 int main()
 {
 	Calculator c;
-
-	auto replaceConstant = [](std::string& expr, const std::string& constant, double value)
-	{
-		auto isIdentifier = [](char c) { return isalnum(c) || c == '_'; };
-		
-		auto first = expr.begin();
-		do
-		{
-			first = std::find_if(first, expr.end(), isIdentifier);
-			auto last = std::find_if_not(first, expr.end(), isIdentifier);
-			
-			if (first == expr.end())
-				break;
-			
-			auto firstIndex = first - expr.begin();
-			
-			if (last - first == constant.end() - constant.begin() && std::string(first, last) == constant)
-				expr.replace(first, last, std::to_string(value));
-			
-			first = std::find_if_not(expr.begin() + firstIndex, expr.end(), isIdentifier);
-		} while (true);
-	};
 	
 	for (std::string expr; getline(std::cin, expr) && expr != "exit"; )
-	{
-		replaceConstant(expr, "pi", pi);
-		replaceConstant(expr, "e", e);
 		std::cout << c.calculate(expr) << '\n';
-	}
 }
