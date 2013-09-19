@@ -70,9 +70,15 @@ public:
 	}
 };
 
-int main()
+int main(int argc, char* argv[])
 {
 	Calculator c;
+	
+	if (argc > 1)
+	{
+		std::cout << c.calculate(argv[1]) << '\n';
+		return 0;
+	}
 	
 	for (std::string expr; getline(std::cin, expr) && expr != "exit"; )
 		std::cout << c.calculate(expr) << '\n';

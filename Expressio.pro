@@ -17,5 +17,6 @@ HEADERS += \
 OTHER_FILES += \
     README.md \
     LICENSE.md \
-    Doxyfile
+    Doxyfile \
+    Expressio/calc
 

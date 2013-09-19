@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Nice calulator wrapper, with better keyboard handling,
+# history scrolling and better looking overall.
+
+while IFS="" read -r -e -d $'\n' -p '> ' line; do 
+    evaluator "$line" # Named the executable 'evaluator' and placed in $PATH 
+    history -s -- "$line"
+done
+echo ""
