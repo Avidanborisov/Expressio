@@ -1,7 +1,7 @@
 Expressio - C++11 Expression Evaluation Library
 ===============================================
 
-This is library currently only provides `Expressio::Evaluator` - A template class which can evaluate expressions based on some value type, and dynamically register user-defined functions.
+This library currently only provides `Expressio::Evaluator` - A template class which can evaluate expressions based on some value type, and dynamically register user-defined functions.
 
 A sample calculator is provided as well.
 
