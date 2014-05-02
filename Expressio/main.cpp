@@ -35,7 +35,7 @@ public:
 
 		auto sin = [=](double x)
 		{	
-			// zero for for 180°n, n ∈ ℤ (make it explicit to fix rounding issues)
+			// zero for 180°n, n ∈ ℤ (make it explicit to fix rounding issues)
 			if (std::fmod(x, 180) == 0)
 				return 0.0;
 			
@@ -44,7 +44,7 @@ public:
 		
 		auto cos = [=](double x)
 		{
-			// zero for for ±90° + 180°n, n ∈ ℤ (make it explicit to fix rounding issues)
+			// zero for ±90° + 180°n, n ∈ ℤ (make it explicit to fix rounding issues)
 			if (std::fmod(x - 90, 180) == 0)
 				return 0.0;
 			
@@ -57,7 +57,7 @@ public:
 			if (std::fmod(x - 90, 180) == 0)
 				throw std::invalid_argument("Math error: Invalid angle");
 			
-			// zero for for 180°n, n ∈ ℤ (make it explicit to fix rounding issues)
+			// zero for 180°n, n ∈ ℤ (make it explicit to fix rounding issues)
 			if (std::fmod(x, 180) == 0)
 				return 0.0;
 			
