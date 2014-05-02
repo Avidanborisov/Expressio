@@ -33,24 +33,43 @@ public:
 		evaluator.addFunction("sqrt" , [](double x) { return std::sqrt(x);   });
 		evaluator.addFunction("trunc", [](double x) { return std::trunc(x);  });
 
-		evaluator.addFunction("cos"  , [=](double x) { return std::cos(x * pi / 180);  });
-		evaluator.addFunction("sin"  , [=](double x) { return std::sin(x * pi / 180);  });
-		evaluator.addFunction("acos" , [=](double x) { return std::acos(x) * 180 / pi; });
-		evaluator.addFunction("asin" , [=](double x) { return std::asin(x) * 180 / pi; });
+		auto sin = [=](double x)
+		{	
+			// zero for for 180°n, n ∈ ℤ (make it explicit to fix rounding issues)
+			if (std::fmod(x, 180) == 0)
+				return 0.0;
+			
+			return std::sin(x * pi / 180);
+		};
+		
+		auto cos = [=](double x)
+		{
+			// zero for for ±90° + 180°n, n ∈ ℤ (make it explicit to fix rounding issues)
+			if (std::fmod(x - 90, 180) == 0)
+				return 0.0;
+			
+			return std::cos(x * pi / 180);
+		};
 		
 		auto tan = [=](double x)
 		{
-			if (std::fmod(x - 90, 180) == 0) // undefined for ±90° + 180°n, n ∈ ℤ
+			// undefined for ±90° + 180°n, n ∈ ℤ
+			if (std::fmod(x - 90, 180) == 0)
 				throw std::invalid_argument("Math error: Invalid angle");
 			
-			if (std::fmod(x, 180) == 0) // zero for for 180°n, n ∈ ℤ (make it explicit to fix rounding issues)
+			// zero for for 180°n, n ∈ ℤ (make it explicit to fix rounding issues)
+			if (std::fmod(x, 180) == 0)
 				return 0.0;
 			
 			return std::tan(x * pi / 180);
 		};
 		
+		evaluator.addFunction("sin"  , sin                                                   );
+		evaluator.addFunction("cos"  , cos                                                   );
 		evaluator.addFunction("tan"  , tan                                                   );
 		evaluator.addFunction("cot"  , [=](double x) { return tan(90 - x);                  });
+		evaluator.addFunction("asin" , [=](double x) { return std::asin(x) * 180 / pi;      });
+		evaluator.addFunction("acos" , [=](double x) { return std::acos(x) * 180 / pi;      });
 		evaluator.addFunction("atan" , [=](double x) { return std::atan(x) * 180 / pi;      });
 		evaluator.addFunction("acot" , [=](double x) { return 90 - std::atan(x) * 180 / pi; });
 		
