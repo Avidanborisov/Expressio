@@ -35,10 +35,24 @@ public:
 
 		evaluator.addFunction("cos"  , [=](double x) { return std::cos(x * pi / 180);  });
 		evaluator.addFunction("sin"  , [=](double x) { return std::sin(x * pi / 180);  });
-		evaluator.addFunction("tan"  , [=](double x) { return std::tan(x * pi / 180);  });
 		evaluator.addFunction("acos" , [=](double x) { return std::acos(x) * 180 / pi; });
 		evaluator.addFunction("asin" , [=](double x) { return std::asin(x) * 180 / pi; });
+		
+		auto tan = [=](double x)
+		{
+			if (std::fmod(x - 90, 180) == 0) // undefined for ±90° + 180°n, n ∈ ℤ
+				throw std::invalid_argument("Math error: Invalid angle");
+			
+			if (std::fmod(x, 180) == 0) // zero for for 180°n, n ∈ ℤ (make it explicit
+				return 0.0;             // to fix rounding issues).
+			
+			return std::tan(x * pi / 180);
+		};
+		
+		evaluator.addFunction("tan"  , tan);
+		evaluator.addFunction("cot"  , [=](double x) { return tan(90 - x); });
 		evaluator.addFunction("atan" , [=](double x) { return std::atan(x) * 180 / pi; });
+		evaluator.addFunction("acot" , [=](double x) { return 90 - std::atan(x) * 180 / pi; });
 		
 		evaluator.addFunction("acosh", [](double x) { return std::acosh(x); });
 		evaluator.addFunction("asinh", [](double x) { return std::asinh(x); });
