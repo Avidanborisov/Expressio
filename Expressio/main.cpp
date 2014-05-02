@@ -43,15 +43,15 @@ public:
 			if (std::fmod(x - 90, 180) == 0) // undefined for ±90° + 180°n, n ∈ ℤ
 				throw std::invalid_argument("Math error: Invalid angle");
 			
-			if (std::fmod(x, 180) == 0) // zero for for 180°n, n ∈ ℤ (make it explicit
-				return 0.0;             // to fix rounding issues).
+			if (std::fmod(x, 180) == 0) // zero for for 180°n, n ∈ ℤ (make it explicit to fix rounding issues)
+				return 0.0;
 			
 			return std::tan(x * pi / 180);
 		};
 		
-		evaluator.addFunction("tan"  , tan);
-		evaluator.addFunction("cot"  , [=](double x) { return tan(90 - x); });
-		evaluator.addFunction("atan" , [=](double x) { return std::atan(x) * 180 / pi; });
+		evaluator.addFunction("tan"  , tan                                                   );
+		evaluator.addFunction("cot"  , [=](double x) { return tan(90 - x);                  });
+		evaluator.addFunction("atan" , [=](double x) { return std::atan(x) * 180 / pi;      });
 		evaluator.addFunction("acot" , [=](double x) { return 90 - std::atan(x) * 180 / pi; });
 		
 		evaluator.addFunction("acosh", [](double x) { return std::acosh(x); });
